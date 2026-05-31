@@ -35,12 +35,15 @@ header{display:flex;align-items:center;justify-content:space-between;padding:1.7
 .logo-mark{width:38px;height:38px;background:var(--red);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .logo-mark span{font-family:var(--ff-head);font-weight:700;font-size:14px;color:white;letter-spacing:0.05em}
 .wordmark{font-family:var(--ff-head);font-size:13px;font-weight:600;color:var(--text3);letter-spacing:0.14em;text-transform:uppercase}
-.phase-indicator{display:flex;gap:8px;align-items:center}
-.ph-pill{padding:5px 16px;border-radius:999px;font-family:var(--ff-head);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;opacity:0.3;transition:opacity 0.4s}
-.ph-pill.why{background:rgba(237,28,46,0.12);color:var(--red);border:0.5px solid rgba(237,28,46,0.3)}
-.ph-pill.what{background:rgba(0,156,204,0.12);color:var(--blue);border:0.5px solid rgba(0,156,204,0.3)}
-.ph-pill.how{background:rgba(80,84,93,0.12);color:var(--slate);border:0.5px solid rgba(80,84,93,0.3)}
-.ph-pill.active{opacity:1}
+.phase-indicator{display:flex;gap:10px;align-items:center}
+.ph-pill{padding:8px 22px;border-radius:999px;font-family:var(--ff-head);font-size:14px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.25;transition:opacity 0.4s,transform 0.3s,box-shadow 0.3s}
+.ph-pill.why{background:rgba(237,28,46,0.12);color:var(--red);border:1.5px solid rgba(237,28,46,0.3)}
+.ph-pill.what{background:rgba(0,156,204,0.12);color:var(--blue);border:1.5px solid rgba(0,156,204,0.3)}
+.ph-pill.how{background:rgba(80,84,93,0.12);color:var(--slate);border:1.5px solid rgba(80,84,93,0.3)}
+.ph-pill.active{opacity:1;transform:scale(1.08)}
+.ph-pill.why.active{background:rgba(237,28,46,0.18);box-shadow:0 2px 12px rgba(237,28,46,0.2)}
+.ph-pill.what.active{background:rgba(0,156,204,0.18);box-shadow:0 2px 12px rgba(0,156,204,0.2)}
+.ph-pill.how.active{background:rgba(80,84,93,0.18);box-shadow:0 2px 12px rgba(80,84,93,0.2)}
 .slide-num{font-family:var(--ff-body);font-size:14px;color:var(--text3);min-width:48px;text-align:right}
 .stage{flex:1;position:relative;overflow:hidden}
 .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 0 1rem;opacity:0;transform:translateX(48px);transition:opacity .5s ease,transform .5s ease;pointer-events:none}
@@ -130,13 +133,13 @@ footer{flex-shrink:0;padding:1rem 0 1.25rem;border-top:1px solid var(--border);d
 
     <!-- 0: Intro -->
     <div class="slide active" id="s0">
-      <div class="slide-tag">Overview</div>
-      <div class="slide-title">A shared resource network<br>for <em>City to City</em></div>
-      <div class="slide-body">A system that lets affiliates contribute resources on their own terms — and lets anyone in the network find what others have built. Built entirely within Google Workspace for the price of existing Google infrastructure.</div>
       <div class="intro-instruction">
         <i class="ti ti-info-circle" aria-hidden="true"></i>
         Slides advance automatically every 20 seconds — or use the arrow keys / buttons below to move at your own pace.
       </div>
+      <div class="slide-tag" style="margin-top:1.5rem">Overview</div>
+      <div class="slide-title">A shared resource network<br>for <em>City to City</em></div>
+      <div class="slide-body">A system that lets affiliates contribute resources on their own terms — and lets anyone in the network find what others have built. Built entirely within Google Workspace for the price of existing Google infrastructure.</div>
       <div class="pill-row" style="margin-top:1rem">
         <div class="pill red">Why we need it</div>
         <div class="pill blue">What it is</div>
