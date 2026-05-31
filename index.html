@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTC Resource Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root {
+  --red:#ED1C2E;--yellow:#FFCC32;--blue:#009CCC;
+  --ocean:#9AA4AF;--cool:#C4C4C4;--slate:#50545D;--deep:#263842;
+  --white:#ffffff;--bg:#ffffff;--bg2:#f7f6f4;--bg3:#f0efec;
+  --text:#263842;--text2:#50545D;--text3:#9AA4AF;
+  --border:rgba(38,56,66,0.12);--border2:rgba(38,56,66,0.22);
+  --radius:4px;--radius-lg:6px;
+  --ff-head:'Montserrat',sans-serif;
+  --ff-serif:'Playfair Display',serif;
+  --ff-body:'Libre Franklin',sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1a2128;--bg2:#212b33;--bg3:#283540;
+    --text:#e8e4dc;--text2:#9AA4AF;--text3:#50545D;
+    --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.2);
+  }
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--ff-body);background:var(--bg);color:var(--text);overflow:hidden}
+.shell{display:flex;flex-direction:column;height:100vh;max-width:920px;margin:0 auto;padding:0 2.5rem}
+header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 0 0.875rem;flex-shrink:0;border-bottom:1px solid var(--border)}
+.logo-area{display:flex;align-items:center;gap:10px}
+.logo-mark{width:28px;height:28px;background:var(--red);border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark span{font-family:var(--ff-head);font-weight:700;font-size:11px;color:white;letter-spacing:0.05em}
+.wordmark{font-family:var(--ff-head);font-size:11px;font-weight:600;color:var(--text3);letter-spacing:0.14em;text-transform:uppercase}
+.phase-indicator{display:flex;gap:6px;align-items:center}
+.ph-pill{padding:3px 10px;border-radius:999px;font-family:var(--ff-head);font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;opacity:0.3;transition:opacity 0.4s}
+.ph-pill.why{background:rgba(237,28,46,0.12);color:var(--red);border:0.5px solid rgba(237,28,46,0.3)}
+.ph-pill.what{background:rgba(0,156,204,0.12);color:var(--blue);border:0.5px solid rgba(0,156,204,0.3)}
+.ph-pill.how{background:rgba(80,84,93,0.12);color:var(--slate);border:0.5px solid rgba(80,84,93,0.3)}
+.ph-pill.active{opacity:1}
+.slide-num{font-family:var(--ff-body);font-size:12px;color:var(--text3);min-width:36px;text-align:right}
+.stage{flex:1;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:2rem 0 0.5rem;opacity:0;transform:translateX(48px);transition:opacity .5s ease,transform .5s ease;pointer-events:none}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.slide.exit{opacity:0;transform:translateX(-48px);transition:opacity .3s ease,transform .3s ease}
+.slide-tag{font-family:var(--ff-head);font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-bottom:0.6rem}
+.slide-title{font-family:var(--ff-serif);font-size:clamp(24px,3.5vw,36px);font-weight:700;line-height:1.15;color:var(--text);margin-bottom:1rem}
+.slide-title em{font-style:italic;color:var(--red)}
+.slide-body{font-size:15px;line-height:1.75;color:var(--text2);max-width:600px;font-weight:300}
+.phase-badge{display:inline-block;padding:3px 10px;border-radius:999px;font-family:var(--ff-head);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.65rem}
+.pb-why{background:rgba(237,28,46,0.1);color:var(--red);border:0.5px solid rgba(237,28,46,0.25)}
+.pb-what{background:rgba(0,156,204,0.1);color:var(--blue);border:0.5px solid rgba(0,156,204,0.25)}
+.pb-how{background:rgba(80,84,93,0.1);color:var(--slate);border:0.5px solid rgba(80,84,93,0.25)}
+.intro-instruction{display:flex;align-items:center;gap:8px;margin-top:1.5rem;padding:10px 14px;background:var(--bg2);border-left:3px solid var(--red);border-radius:0 var(--radius) var(--radius) 0;font-size:13px;color:var(--text2);font-weight:300;max-width:520px}
+.intro-instruction i{color:var(--red);font-size:16px;flex-shrink:0}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.25rem}
+.pill{padding:5px 13px;border-radius:999px;font-family:var(--ff-head);font-size:11px;font-weight:600;letter-spacing:0.06em;border:0.5px solid var(--border2);color:var(--text2);background:var(--bg2);text-transform:uppercase}
+.pill.red{background:rgba(237,28,46,0.08);color:var(--red);border-color:rgba(237,28,46,0.2)}
+.pill.blue{background:rgba(0,156,204,0.08);color:var(--blue);border-color:rgba(0,156,204,0.2)}
+.pill.slate{background:rgba(80,84,93,0.08);color:var(--slate);border-color:rgba(80,84,93,0.2)}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.25rem}
+.card{border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:1rem;background:var(--bg2);border-top:2px solid var(--red)}
+.card-icon{font-size:18px;margin-bottom:7px;color:var(--red)}
+.card-name{font-family:var(--ff-head);font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:0.04em;text-transform:uppercase}
+.card-desc{font-size:12px;color:var(--text3);line-height:1.55;font-weight:300}
+.gov-list{margin-top:1.1rem;display:flex;flex-direction:column;gap:10px}
+.gov-item{display:flex;align-items:flex-start;gap:11px;font-size:14px;color:var(--text2);line-height:1.6;font-weight:300}
+.gov-dot{width:4px;min-width:4px;height:20px;background:var(--red);border-radius:2px;margin-top:2px}
+.gov-item strong{font-weight:600;color:var(--text)}
+.seq-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:1.1rem}
+.sq{padding:1rem;border:0.5px solid var(--border2);border-radius:0 var(--radius-lg) var(--radius-lg) 0;background:var(--bg2)}
+.sq.first{border-left:3px solid var(--red)}
+.sq.second{border-left:3px solid var(--blue)}
+.sq-lbl{font-family:var(--ff-head);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:5px}
+.sq-lbl.red{color:var(--red)}.sq-lbl.blue{color:var(--blue)}
+.sq-name{font-family:var(--ff-head);font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
+.sq-desc{font-size:12px;color:var(--text3);line-height:1.6;font-weight:300}
+.seq-note{margin-top:0.875rem;font-size:13px;color:var(--text2);line-height:1.65;padding:10px 14px;background:var(--bg2);border-radius:0 var(--radius) var(--radius) 0;border-left:3px solid var(--ocean);font-weight:300}
+.steps{margin-top:1.1rem;display:flex;flex-direction:column;gap:8px}
+.step-row{display:flex;align-items:flex-start;gap:12px}
+.step-num{font-family:var(--ff-serif);font-size:22px;font-weight:700;color:var(--red);min-width:28px;line-height:1.1}
+.step-body strong{font-family:var(--ff-head);font-size:12px;font-weight:600;color:var(--text);display:block;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1px}
+.step-body span{font-size:12px;color:var(--text3);line-height:1.55;font-weight:300}
+footer{flex-shrink:0;padding:0.75rem 0 1rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
+.progress-track{height:2px;background:var(--border);border-radius:1px;overflow:hidden}
+.progress-fill{height:100%;background:var(--red);width:0%;transition:width 0.4s linear}
+.controls{display:flex;align-items:center;justify-content:center;gap:12px}
+.ctrl-btn{background:none;border:0.5px solid var(--border2);border-radius:50%;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:13px;transition:background .15s,border-color .15s}
+.ctrl-btn:hover{background:var(--bg2);border-color:var(--red);color:var(--red)}
+.ctrl-btn:disabled{opacity:.25;cursor:default}
+.ctrl-btn:disabled:hover{background:none;border-color:var(--border2);color:var(--text2)}
+.dots{display:flex;gap:6px;align-items:center}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .2s,transform .2s}
+.dot.active{background:var(--red);transform:scale(1.5)}
+.play-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:4px;display:flex;align-items:center;transition:color .15s}
+.play-btn:hover{color:var(--red)}
+
+/* ── Flowchart slide ── */
+.fc-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:visible;margin-top:0.25rem}
+.fc-wrap svg{width:100%;height:auto;max-height:calc(100vh - 220px)}
+
+@media(max-width:640px){
+  .shell{padding:0 1.25rem}
+  .card-grid{grid-template-columns:1fr;gap:7px}
+  .seq-grid{grid-template-columns:1fr;gap:8px}
+  .slide-title{font-size:22px}
+  .wordmark{display:none}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="logo-area">
+      <div class="logo-mark"><span>CTC</span></div>
+      <span class="wordmark">Resource Infrastructure</span>
+    </div>
+    <div class="phase-indicator">
+      <span class="ph-pill why" id="ph-why">Why</span>
+      <span class="ph-pill what" id="ph-what">What</span>
+      <span class="ph-pill how" id="ph-how">How</span>
+    </div>
+    <span class="slide-num" id="slide-num">1 / 10</span>
+  </header>
+
+  <div class="stage" id="stage">
+
+    <!-- 0: Intro -->
+    <div class="slide active" id="s0">
+      <div class="slide-tag">Overview</div>
+      <div class="slide-title">A shared resource network<br>for <em>City to City</em></div>
+      <div class="slide-body">A system that lets affiliates contribute resources on their own terms — and lets anyone in the network find what others have built. Built entirely within Google Workspace for the price of existing Google infrastructure.</div>
+      <div class="intro-instruction">
+        <i class="ti ti-info-circle" aria-hidden="true"></i>
+        Slides advance automatically every 20 seconds — or use the arrow keys / buttons below to move at your own pace.
+      </div>
+      <div class="pill-row" style="margin-top:1rem">
+        <div class="pill red">Why we need it</div>
+        <div class="pill blue">What it is</div>
+        <div class="pill slate">How it works</div>
+      </div>
+    </div>
+
+    <!-- 1: Why 1 -->
+    <div class="slide" id="s1">
+      <div class="phase-badge pb-why">Why</div>
+      <div class="slide-tag">The problem</div>
+      <div class="slide-title">Resources exist.<br>They just can't be <em>found</em>.</div>
+      <div class="slide-body">Across the CTC network, affiliates in cities around the world have built strategies, tools, curriculum, and coaching materials. Most of it lives in someone's Drive — invisible to everyone else. The knowledge exists. The infrastructure to share it doesn't.</div>
+    </div>
+
+    <!-- 2: Why 2 -->
+    <div class="slide" id="s2">
+      <div class="phase-badge pb-why">Why</div>
+      <div class="slide-tag">The principle</div>
+      <div class="slide-title">Governed by the people<br>who <em>built</em> it.</div>
+      <div class="slide-body">Affiliates retain ownership. Nothing is shared beyond what they explicitly permit. The system is designed to serve the people it depends on.</div>
+      <div class="gov-list">
+        <div class="gov-item"><div class="gov-dot"></div><span><strong>Files stay in affiliate-controlled Drive.</strong> The system holds metadata and links only.</span></div>
+        <div class="gov-item"><div class="gov-dot"></div><span><strong>Permission is set at submission.</strong> Nothing becomes more visible without explicit approval.</span></div>
+        <div class="gov-item"><div class="gov-dot"></div><span><strong>Withdrawal is always possible.</strong> Any resource can be removed at any time through the stream coordinator.</span></div>
+        <div class="gov-item"><div class="gov-dot"></div><span><strong>Participation is invited, not required.</strong> The network grows through trust, not mandate.</span></div>
+      </div>
+    </div>
+
+    <!-- 3: What 1 -->
+    <div class="slide" id="s3">
+      <div class="phase-badge pb-what">What</div>
+      <div class="slide-tag">One network, three distinct communities</div>
+      <div class="slide-title">Three resource <em>streams</em></div>
+      <div class="slide-body">Each stream reflects a different professional identity — its own intake, storage, coordinator, and vocabulary. Separate by design.</div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon"><i class="ti ti-building-community" aria-hidden="true"></i></div><div class="card-name">Hub City Resources</div><div class="card-desc">City strategies, gospel DNA, movement metrics, city engagement tools</div></div>
+        <div class="card"><div class="card-icon"><i class="ti ti-school" aria-hidden="true"></i></div><div class="card-name">Training Resources</div><div class="card-desc">Curriculum, facilitator guides</div></div>
+        <div class="card"><div class="card-icon"><i class="ti ti-users" aria-hidden="true"></i></div><div class="card-name">Coaching Resources</div><div class="card-desc">Coaching manuals, gospel coaching tools, practitioner case studies</div></div>
+      </div>
+    </div>
+
+    <!-- 4: What 2 -->
+    <div class="slide" id="s4">
+      <div class="phase-badge pb-what">What</div>
+      <div class="slide-tag">Each stream, its own way in</div>
+      <div class="slide-title">Three visual <em>entry points</em></div>
+      <div class="slide-body">Each stream offers a distinct interface matched to how people in that community naturally search and browse.</div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon"><i class="ti ti-map-2" aria-hidden="true"></i></div><div class="card-name">Hub City Resources</div><div class="card-desc">Resources by city and affiliate</div></div>
+        <div class="card"><div class="card-icon"><i class="ti ti-language" aria-hidden="true"></i></div><div class="card-name">Training Resources</div><div class="card-desc">Language-based resource discovery</div></div>
+        <div class="card"><div class="card-icon"><i class="ti ti-filter" aria-hidden="true"></i></div><div class="card-name">Coaching Resources</div><div class="card-desc">Resources by coaching context</div></div>
+      </div>
+    </div>
+
+    <!-- 5: What 3 -->
+    <div class="slide" id="s5">
+      <div class="phase-badge pb-what">What</div>
+      <div class="slide-tag">Technology stack</div>
+      <div class="slide-title">Entirely within <em>Google Workspace</em></div>
+      <div class="slide-body">No new platforms. No external subscriptions. Phase 1 delivers intake, storage, metadata, triage, permissions, and multilingual tracking — using tools the network already has.</div>
+      <div class="pill-row">
+        <div class="pill blue">Google Sites + Forms</div>
+        <div class="pill blue">Google Drive + Sheets</div>
+        <div class="pill blue">Apps Script automation</div>
+      </div>
+      <div class="slide-body" style="margin-top:1rem;font-size:13px;">One landing page. Three stream sites. One coordinator per stream. One CTC super-admin view across all three.</div>
+    </div>
+
+    <!-- 6: How 1 -->
+    <div class="slide" id="s6">
+      <div class="phase-badge pb-how">How</div>
+      <div class="slide-tag">Two consent processes — one sequence</div>
+      <div class="slide-title">Who gets approached <em>first</em>, and why</div>
+      <div class="seq-grid">
+        <div class="sq first"><div class="sq-lbl red">First · resource teams</div><div class="sq-name">Co-designers, not end users</div><div class="sq-desc">Coaching, Training, and Hub City teams shape the system before affiliates see it. Their buy-in gives CTC legitimate authority in affiliate conversations.</div></div>
+        <div class="sq second"><div class="sq-lbl blue">Second · affiliates</div><div class="sq-name">A trust conversation, not a features tour</div><div class="sq-desc">Affiliates own the resources. Their agreement to the permissions model is structural. Outreach flows through each stream coordinator's existing relationships.</div></div>
+      </div>
+      <div class="seq-note">Each stream coordinator is already in relationship with the affiliates most relevant to their stream. The bridge to affiliates runs through them.</div>
+    </div>
+
+    <!-- 7: How 2 -->
+    <div class="slide" id="s7">
+      <div class="phase-badge pb-how">How</div>
+      <div class="slide-tag">Design philosophy</div>
+      <div class="slide-title"><em>Designed</em> before it is built</div>
+      <div class="slide-body">Five stages bring the right people in before anything is built. Timeline is process-driven, not date-driven.</div>
+      <div class="steps">
+        <div class="step-row"><div class="step-num">01</div><div class="step-body"><strong>Team alignment</strong><span>One-on-one with each stream lead — testing direction, not briefing a plan.</span></div></div>
+        <div class="step-row"><div class="step-num">02</div><div class="step-body"><strong>Stream working sessions</strong><span>Each stream maps what it collects, who owns it, and what vocabulary it uses.</span></div></div>
+        <div class="step-row"><div class="step-num">03</div><div class="step-body"><strong>Affiliate outreach</strong><span>Through coordinator relationships — we are designing this together before anything is built.</span></div></div>
+        <div class="step-row"><div class="step-num">04</div><div class="step-body"><strong>Participatory survey</strong><span>Affiliates vote on category tags, permission options, and language fields.</span></div></div>
+        <div class="step-row"><div class="step-num">05</div><div class="step-body"><strong>Schema consolidation</strong><span>Shared vocabulary agreed across all three streams. Build decision follows.</span></div></div>
+      </div>
+    </div>
+
+    <!-- 8: How 3 — proper flowchart -->
+    <div class="slide" id="s8" style="justify-content:flex-start;padding-top:1.25rem">
+      <div class="phase-badge pb-how">How</div>
+      <div class="slide-tag">Hub City stream — representative of all streams</div>
+      <div class="slide-title" style="font-size:clamp(20px,2.6vw,28px);margin-bottom:0.75rem">From submission to <em>visible</em></div>
+      <div class="fc-wrap">
+        <svg width="100%" viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flowchart: affiliate submits resource through Google Form, files stored in Drive, Apps Script triggers confirmation, metadata recorded in Google Sheet, CTC coordinator reviews and approves">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M2 2L8 5L2 8" fill="none" stroke="#9AA4AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+            <marker id="ah-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M2 2L8 5L2 8" fill="none" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <!-- ── ROW 1: Affiliate ── cx=400 -->
+          <rect x="300" y="10" width="200" height="52" rx="10" fill="#263842" stroke="#1a262f" stroke-width="1"/>
+          <text x="400" y="32" text-anchor="middle" dominant-baseline="central" font-family="Montserrat,sans-serif" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.06em">AFFILIATE</text>
+          <text x="400" y="52" text-anchor="middle" dominant-baseline="central" font-family="Libre Franklin,sans-serif" font-size="11" font-weight="300" fill="#9AA4AF">Submits resource + metadata</text>
+
+          <!-- arrow 1→2 -->
+          <line x1="400" y1="62" x2="400" y2="83" stroke="#9AA4AF" stroke-width="1.5" marker-end="url(#ah)"/>
+
+          <!-- ── ROW 2: Google Form ── cx=400 -->
+          <rect x="294" y="83" width="212" height="52" rx="10" fill="#1D6B99" stroke="#175a80" stroke-width="1"/>
+          <text x="400" y="105" text-anchor="middle" dominant-baseline="central" font-family="Montserrat,sans-serif" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.06em">GOOGLE FORM</text>
+          <text x="400" y="124" text-anchor="middle" dominant-baseline="central" font-family="Libre Franklin,sans-serif" font-size="11" font-weight="300" fill="#cce4f4">Title · language · permissions</text>
+
+          <!-- branch left to Drive -->
+          <path d="M350 135 L350 158 L170 158 L170 178" fill="none" stroke="#9AA4AF" stroke-width="1.5" marker-end="url(#ah)"/>
+          <!-- branch right to Apps Script -->
+          <path d="M450 135 L450 158 L630 158 L630 178" fill="none" stroke="#9AA4AF" stroke-width="1.5" marker-end="url(#ah)"/>
+
+          <!-- ── ROW 3 LEFT: Google Drive ── cx=170 -->
+          <rect x="64" y="178" width="212" height="52" rx="10" fill="#2a7fa8" stroke="#1f6080" stroke-width="1"/>
+          <text x="170" y="200" text-anchor="middle" dominant-baseline="central" font-family="Montserrat,sans-serif" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.06em">GOOGLE DRIVE</text>
+          <text x="170" y="219" text-anchor="middle" dominant-baseline="central" font-family="Libre Franklin,sans-serif" font-size="11" font-weight="300" fill="#cce8f4">File in affiliate folder</text>
+
+          <!-- ── ROW 3 RIGHT: Apps Script ── cx=630 -->
+          <rect x="524" y="178" width="212" height="52" rx="10" fill="#50545D" stroke="#3d4148" stroke-width="1"/>
+          <text x="630" y="200" text-anchor="middle" dominant-baseline="central" font-family="Montserrat,sans-serif" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.06em">APPS SCRIPT</text>
+          <text x="630" y="219" text-anchor="middle" dominant-baseline="central" font-family="Libre Franklin,sans-serif" font-size="11" font-weight="300" fill="#c4c4c4">Confirmation email sent</text>
+
+          <!-- both converge to Sheet -->
+          <path d="M170 230 L170 258 L310 258 L310 272" fill="none" stroke="#9AA4AF" stroke-width="1.5" marker-end="url(#ah)"/>
+          <path d="M630 230 L630 258 L490 258 L490 272" fill="none" stroke="#9AA4AF" stroke-width="1.5" marker-end="url(#ah)"/>
+
+          <!-- ── ROW 4: Google Sheet ── cx=400 -->
+          <rect x="268" y="272" width="264" height="52" rx="10" fill="#C1830A" stroke="#a06e08" stroke-width="1"/>
+          <text x="400" y="294" text-anchor="middle" dominant-baseline="central" font-family="Montserrat,sans-serif" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.06em">GOOGLE SHEET</text>
+          <text x="400" y="313" text-anchor="middle" dominant-baseline="central" font-family="Libre Franklin,sans-serif" font-size="11" font-weight="300" fill="#fde8b4">Metadata row · triage status</text>
+
+          <!-- arrow 4→5 -->
+          <line x1="400" y1="324" x2="400" y2="345" stroke="#9AA4AF" stroke-width="1.5" marker-end="url(#ah)"/>
+
+          <!-- ── ROW 5: CTC Coordinator ── cx=400 -->
+          <rect x="280" y="345" width="240" height="52" rx="10" fill="#ED1C2E" stroke="#c51626" stroke-width="1"/>
+          <text x="400" y="367" text-anchor="middle" dominant-baseline="central" font-family="Montserrat,sans-serif" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.06em">CTC COORDINATOR</text>
+          <text x="400" y="386" text-anchor="middle" dominant-baseline="central" font-family="Libre Franklin,sans-serif" font-size="11" font-weight="300" fill="#ffc0c5">Reviews · approves · returns</text>
+
+          <!-- ── LEFT outcome: Needs revision ── cx=110 -->
+          <rect x="20" y="353" width="160" height="44" rx="8" fill="#1e2d36" stroke="#2e4452" stroke-width="1"/>
+          <text x="100" y="371" text-anchor="middle" dominant-baseline="central" font-family="Montserrat,sans-serif" font-size="10" font-weight="700" fill="#9AA4AF" letter-spacing="0.06em">NEEDS REVISION</text>
+          <text x="100" y="387" text-anchor="middle" dominant-baseline="central" font-family="Libre Franklin,sans-serif" font-size="10" font-weight="300" fill="#6a7a84">Returned to affiliate</text>
+          <path d="M180 375 L280 375" fill="none" stroke="#9AA4AF" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#ah)"/>
+
+          <!-- ── RIGHT outcome: Approved ── cx=680 -->
+          <rect x="620" y="345" width="160" height="52" rx="8" fill="#0a4f34" stroke="#0e6644" stroke-width="1"/>
+          <text x="700" y="363" text-anchor="middle" dominant-baseline="central" font-family="Montserrat,sans-serif" font-size="10" font-weight="700" fill="#6ee7b7" letter-spacing="0.06em">APPROVED</text>
+          <text x="700" y="379" text-anchor="middle" dominant-baseline="central" font-family="Libre Franklin,sans-serif" font-size="10" font-weight="300" fill="#a7f3d0">Internal or global</text>
+          <text x="700" y="393" text-anchor="middle" dominant-baseline="central" font-family="Libre Franklin,sans-serif" font-size="10" font-weight="300" fill="#a7f3d0">Public flag = true</text>
+          <path d="M520 371 L620 371" fill="none" stroke="#1D9E75" stroke-width="1.5" marker-end="url(#ah-g)"/>
+
+          <!-- ── BOTTOM: Network visible ── cx=700 -->
+          <line x1="700" y1="397" x2="700" y2="418" stroke="#1D9E75" stroke-width="1.5" marker-end="url(#ah-g)"/>
+          <rect x="594" y="418" width="212" height="52" rx="10" fill="#0F6E56" stroke="#085041" stroke-width="1"/>
+          <text x="700" y="440" text-anchor="middle" dominant-baseline="central" font-family="Montserrat,sans-serif" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.06em">NETWORK VISIBLE</text>
+          <text x="700" y="459" text-anchor="middle" dominant-baseline="central" font-family="Libre Franklin,sans-serif" font-size="11" font-weight="300" fill="#9FE1CB">Searchable · Hub City entry point</text>
+
+        </svg>
+      </div>
+    </div>
+
+    <!-- 9: Close -->
+    <div class="slide" id="s9">
+      <div class="slide-tag">CTC Resource Infrastructure</div>
+      <div class="slide-title">Built with the network.<br><em>For</em> the network.</div>
+      <div class="slide-body" style="max-width:540px">The system works because the people it serves helped design it. Resources stay owned by the affiliates who created them. The network grows through trust. And everything runs on infrastructure CTC already has.</div>
+      <div class="pill-row" style="margin-top:1.25rem">
+        <div class="pill red">Affiliate-owned</div>
+        <div class="pill slate">Coordinator-governed</div>
+        <div class="pill blue">Google Workspace</div>
+        <div class="pill slate">Co-designed</div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="progress-track"><div class="progress-fill" id="prog"></div></div>
+    <div class="controls">
+      <button class="ctrl-btn" id="prev-btn" disabled aria-label="Previous slide"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+      <div class="dots" id="dots"></div>
+      <button class="ctrl-btn" id="next-btn" aria-label="Next slide"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+      <button class="play-btn" id="play-btn" aria-label="Pause auto-play"><i class="ti ti-player-pause" aria-hidden="true"></i></button>
+    </div>
+  </footer>
+</div>
+
+<script>
+const TOTAL=10,INTERVAL=20000;
+const phases=['','why','why','what','what','what','how','how','how',''];
+let cur=0,playing=true,timer=null;
+const slides=Array.from({length:TOTAL},(_,i)=>document.getElementById('s'+i));
+const dotsEl=document.getElementById('dots');
+const prevBtn=document.getElementById('prev-btn'),nextBtn=document.getElementById('next-btn');
+const playBtn=document.getElementById('play-btn'),numEl=document.getElementById('slide-num');
+const prog=document.getElementById('prog');
+const phWhy=document.getElementById('ph-why'),phWhat=document.getElementById('ph-what'),phHow=document.getElementById('ph-how');
+for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.addEventListener('click',()=>goTo(i));dotsEl.appendChild(d);}
+function updatePhase(){const p=phases[cur];phWhy.classList.toggle('active',p==='why');phWhat.classList.toggle('active',p==='what');phHow.classList.toggle('active',p==='how');}
+function updateDots(){document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur));}
+function goTo(idx){const old=cur;slides[old].classList.remove('active');slides[old].classList.add('exit');setTimeout(()=>slides[old].classList.remove('exit'),350);cur=idx;slides[cur].classList.add('active');prevBtn.disabled=cur===0;nextBtn.disabled=cur===TOTAL-1;numEl.textContent=(cur+1)+' / '+TOTAL;updateDots();updatePhase();resetProg();}
+function next(){if(cur<TOTAL-1)goTo(cur+1);else{playing=false;updatePlayBtn();clearInterval(timer);}}
+function startTimer(){clearInterval(timer);timer=setInterval(()=>{if(playing)next();},INTERVAL);}
+function resetProg(){prog.style.transition='none';prog.style.width='0%';requestAnimationFrame(()=>{prog.style.transition='width '+INTERVAL+'ms linear';prog.style.width=playing?'100%':'0%';});}
+function updatePlayBtn(){playBtn.innerHTML=playing?'<i class="ti ti-player-pause" aria-hidden="true"></i>':'<i class="ti ti-player-play" aria-hidden="true"></i>';playBtn.setAttribute('aria-label',playing?'Pause':'Resume auto-play');}
+prevBtn.addEventListener('click',()=>{playing=false;updatePlayBtn();clearInterval(timer);prog.style.width='0%';if(cur>0)goTo(cur-1);});
+nextBtn.addEventListener('click',()=>{if(cur<TOTAL-1){playing=false;updatePlayBtn();clearInterval(timer);prog.style.width='0%';goTo(cur+1);}});
+playBtn.addEventListener('click',()=>{playing=!playing;updatePlayBtn();if(playing){startTimer();resetProg();}else{clearInterval(timer);prog.style.transition='none';prog.style.width='0%';}});
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&cur<TOTAL-1){playing=false;updatePlayBtn();clearInterval(timer);prog.style.width='0%';goTo(cur+1);}if(e.key==='ArrowLeft'&&cur>0){playing=false;updatePlayBtn();clearInterval(timer);prog.style.width='0%';goTo(cur-1);}if(e.key===' '){e.preventDefault();playBtn.click();}});
+updatePhase();startTimer();resetProg();
+</script>
+</body>
+</html>
